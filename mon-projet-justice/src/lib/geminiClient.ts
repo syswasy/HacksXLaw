@@ -70,50 +70,41 @@ export async function categorizeDocumentWithGemini(
     }
 
     const categories = [
-      'identity',
-      'migration_status',
-      'employment',
-      'finance',
-      'procedures',
-      'housing',
-      'family',
-      'health',
-      'other',
+      'identity', 'migration_status', 'employment', 'finance', 
+      'procedures', 'housing', 'family', 'health', 'other'
     ];
 
-    const prompt = `Classify this immigration document into: ${categories.join(', ')}
+    // Correction : On s'assure d'extraire le texte peu importe le nom de la propriété
+    const content = doc.extraction_result?.extracted_text || (doc as any).text || '';
 
-Name: ${doc.name}
-Content: ${doc.extraction_result?.extracted_text?.substring(0, 500) || 'N/A'}
+    const prompt = `Classify this document into EXACTLY one of these categories: ${categories.join(', ')}.
+    
+Document Name: ${doc.name}
+Document Content: ${content.substring(0, 1000)}
 
-Response JSON:
-{
-  "category": "category",
-  "confidence": 0.0 to 1.0,
-  "reasoning": "reason"
-}`;
+Constraint: You must return valid JSON. The "category" field must be lowercase and match the provided list.`;
 
-    const response = await model.generateContent(prompt);
-    const text = response.response.text();
+    const response = await model.generateContent({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: { 
+        responseMimeType: "application/json",
+        temperature: 0.1 // Plus bas pour plus de précision sur les catégories
+      }
+    });
 
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      return { category: 'other', confidence: 0.5, reasoning: 'Parse error' };
-    }
+    const result = JSON.parse(response.response.text());
+    
+    // Correction : Nettoyage de la réponse (minuscules et espaces)
+    const sanitizedCategory = result.category?.toLowerCase().trim();
 
-    const result = JSON.parse(jsonMatch[0]);
     return {
-      category: categories.includes(result.category) ? result.category : 'other',
-      confidence: Math.min(1, Math.max(0, result.confidence || 0.5)),
+      category: categories.includes(sanitizedCategory) ? sanitizedCategory : 'other',
+      confidence: result.confidence || 0.5,
       reasoning: result.reasoning || '',
     };
   } catch (error) {
     console.error('Categorization error:', error);
-    return {
-      category: 'other',
-      confidence: 0,
-      reasoning: error instanceof Error ? error.message : 'Unknown error',
-    };
+    return { category: 'other', confidence: 0, reasoning: 'Parsing or API error' };
   }
 }
 
