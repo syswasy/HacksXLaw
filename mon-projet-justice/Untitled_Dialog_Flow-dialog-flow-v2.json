@@ -1,0 +1,375 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-05-09T20:00:00.000Z",
+  "exportedByUserId": "github-copilot",
+  "dialogFlow": {
+    "name": "JusticeAccess 4-Step Workflow",
+    "visibility": "public"
+  },
+  "nodes": [
+    {
+      "id": "start-node",
+      "type": "start",
+      "position": { "x": 100, "y": 273 },
+      "data": {
+        "label": "Start",
+        "config": {}
+      },
+      "measured": { "width": 169, "height": 92 }
+    },
+    {
+      "id": "user-profile-node",
+      "type": "fact",
+      "position": { "x": 350, "y": 273 },
+      "data": {
+        "label": "Step 1: User Profile",
+        "config": {
+          "factDefinitions": [
+            {
+              "label": "Role",
+              "dataType": "custom",
+              "required": true,
+              "instructions": "What best describes your role or situation?",
+              "customEnumValues": [
+                "null",
+                "Employee",
+                "Employer",
+                "Tenant",
+                "Landlord",
+                "Consumer",
+                "Business Owner",
+                "Immigrant",
+                "Student",
+                "Other"
+              ],
+              "sourcePreference": "either"
+            },
+            {
+              "label": "Jurisdiction",
+              "dataType": "text",
+              "required": true,
+              "instructions": "What province, state, or country applies to your situation?",
+              "customEnumValues": [],
+              "sourcePreference": "either"
+            },
+            {
+              "label": "Language Preference",
+              "dataType": "custom",
+              "required": false,
+              "instructions": "What language would you like guidance in?",
+              "customEnumValues": ["null", "English", "French", "Spanish", "Other"],
+              "sourcePreference": "either"
+            },
+            {
+              "label": "Family Status",
+              "dataType": "custom",
+              "required": false,
+              "instructions": "What is your family status?",
+              "customEnumValues": ["null", "Single", "Married", "Common-Law", "Divorced", "With Dependents", "Other"],
+              "sourcePreference": "either"
+            },
+            {
+              "label": "Employment Status",
+              "dataType": "custom",
+              "required": false,
+              "instructions": "What is your current employment status?",
+              "customEnumValues": ["null", "Employed Full-Time", "Employed Part-Time", "Self-Employed", "Unemployed", "Student", "Retired", "Other"],
+              "sourcePreference": "either"
+            }
+          ]
+        }
+      },
+      "measured": { "width": 240, "height": 92 }
+    },
+    {
+      "id": "documents-upload-node",
+      "type": "fact",
+      "position": { "x": 650, "y": 273 },
+      "data": {
+        "label": "Step 2: Documents Upload",
+        "config": {
+          "factDefinitions": [
+            {
+              "label": "Documents Uploaded",
+              "dataType": "document_uploaded",
+              "required": false,
+              "instructions": "Upload the documents you want reviewed (contracts, permits, letters, etc.)",
+              "customEnumValues": [],
+              "sourcePreference": "docs-only"
+            },
+            {
+              "label": "Document Count",
+              "dataType": "number",
+              "required": false,
+              "instructions": "How many documents did you upload?",
+              "customEnumValues": [],
+              "sourcePreference": "docs-only"
+            }
+          ]
+        }
+      },
+      "measured": { "width": 240, "height": 92 }
+    },
+    {
+      "id": "profile-context-node",
+      "type": "reasoning",
+      "position": { "x": 500, "y": 100 },
+      "data": {
+        "label": "Profile Context",
+        "config": {
+          "question": "How should guidance be tailored to the user's profile?",
+          "instructions": "Synthesize the user's role, jurisdiction, language preference, family status, and employment to determine how to personalize all downstream recommendations. This profile context will influence tone, scope, resource selection, and legal reference framework for all guidance.",
+          "dataType": "text",
+          "customEnumValues": [],
+          "isChildNode": false,
+          "children": []
+        }
+      },
+      "measured": { "width": 240, "height": 92 }
+    },
+    {
+      "id": "doc-check-node",
+      "type": "switch",
+      "position": { "x": 950, "y": 273 },
+      "data": {
+        "label": "Documents Present?",
+        "config": {
+          "branches": [
+            {
+              "id": "br_docs_yes",
+              "conditions": [
+                {
+                  "sourceNodeId": "documents-upload-node:1",
+                  "operator": ">",
+                  "compareValue": 0,
+                  "conditionOperator": "AND"
+                }
+              ],
+              "targetNodeId": "doc-categorize-node",
+              "isDefault": false,
+              "color": "border-blue-500"
+            },
+            {
+              "id": "br_docs_no",
+              "conditions": [],
+              "targetNodeId": "no-docs-outcome",
+              "isDefault": true,
+              "color": "border-orange-500"
+            }
+          ]
+        }
+      },
+      "measured": { "width": 268, "height": 92 }
+    },
+    {
+      "id": "doc-categorize-node",
+      "type": "reasoning",
+      "position": { "x": 1200, "y": 150 },
+      "data": {
+        "label": "Step 3: Categorize Documents",
+        "config": {
+          "question": "How should the documents be organized and categorized?",
+          "instructions": "Analyze all uploaded documents and group them by category such as: Immigration/Visa, Housing/Lease, Employment/Contracts, Education/School, Family/Marriage, Business/Commerce, Finance/Debt, Health/Insurance, Legal/Court, Other. For each category, list the documents. If multiple documents exist in one category, note this for potential synthesis. Create a clear taxonomy that helps the user understand what they have and what might be missing.",
+          "dataType": "text",
+          "customEnumValues": [],
+          "isChildNode": false,
+          "children": []
+        }
+      },
+      "measured": { "width": 260, "height": 92 }
+    },
+    {
+      "id": "doc-select-node",
+      "type": "reasoning",
+      "position": { "x": 1500, "y": 150 },
+      "data": {
+        "label": "Step 4a: Document Selection",
+        "config": {
+          "question": "Which document should be analyzed first, and why?",
+          "instructions": "Based on the categorization, identify which document the user should review. If there are multiple documents, suggest starting with the most urgent or foundational one. Group related documents from the same category if helpful. Provide a brief context for why this document is important to understand.",
+          "dataType": "text",
+          "customEnumValues": [],
+          "isChildNode": false,
+          "children": []
+        }
+      },
+      "measured": { "width": 260, "height": 92 }
+    },
+    {
+      "id": "doc-analyze-node",
+      "type": "reasoning",
+      "position": { "x": 1800, "y": 150 },
+      "data": {
+        "label": "Step 4b: Document Analysis",
+        "config": {
+          "question": "What is the analysis of the selected document?",
+          "instructions": "For the selected document: (1) Identify its type and purpose in plain language. (2) Check immediately for urgency, incompleteness, validity issues, or expiration dates. If urgency is detected, flag it. (3) If no urgency, explain the document's key implications in simple terms, translate any jargon. (4) Identify the next concrete step the user should take. (5) Always include relevant resources, referral pathways, or help services that match the user's profile and jurisdiction.",
+          "dataType": "text",
+          "customEnumValues": [],
+          "isChildNode": false,
+          "children": []
+        }
+      },
+      "measured": { "width": 260, "height": 92 }
+    },
+    {
+      "id": "urgency-check-node",
+      "type": "switch",
+      "position": { "x": 2100, "y": 150 },
+      "data": {
+        "label": "Urgency Detected?",
+        "config": {
+          "branches": [
+            {
+              "id": "br_urgent_yes",
+              "conditions": [
+                {
+                  "sourceNodeId": "doc-analyze-node",
+                  "operator": "contains",
+                  "compareValue": "urgent",
+                  "conditionOperator": "AND"
+                }
+              ],
+              "targetNodeId": "urgent-guidance-outcome",
+              "isDefault": false,
+              "color": "border-red-500"
+            },
+            {
+              "id": "br_urgent_no",
+              "conditions": [],
+              "targetNodeId": "doc-guidance-outcome",
+              "isDefault": true,
+              "color": "border-green-500"
+            }
+          ]
+        }
+      },
+      "measured": { "width": 268, "height": 92 }
+    },
+    {
+      "id": "urgent-guidance-outcome",
+      "type": "outcome",
+      "position": { "x": 2350, "y": 50 },
+      "data": {
+        "label": "Urgent Guidance",
+        "config": {
+          "template": "free_form",
+          "instructions": "Present urgent guidance clearly: (1) State the urgency at the top with red flag. (2) Explain why immediate action is required. (3) List the concrete next steps in order of priority. (4) Include immediate resource pathways, help hotlines, legal aid contact info, or emergency services as applicable to the user's jurisdiction and situation. (5) Provide a timeline (days/weeks) for when action must be taken."
+        }
+      },
+      "measured": { "width": 260, "height": 92 }
+    },
+    {
+      "id": "doc-guidance-outcome",
+      "type": "outcome",
+      "position": { "x": 2350, "y": 250 },
+      "data": {
+        "label": "Document Guidance",
+        "config": {
+          "template": "free_form",
+          "instructions": "Provide clear, document-specific guidance: (1) Simple explanation of what the document is and what it means (avoid jargon). (2) Summarize key obligations, rights, or risks. (3) Next concrete step the user should take. (4) Relevant resources: legal aid, community services, government portals, templates, or expert contact info matching their profile and jurisdiction. (5) Timeline for next action (if applicable)."
+        }
+      },
+      "measured": { "width": 260, "height": 92 }
+    },
+    {
+      "id": "no-docs-outcome",
+      "type": "outcome",
+      "position": { "x": 1200, "y": 450 },
+      "data": {
+        "label": "No Documents",
+        "config": {
+          "template": "free_form",
+          "instructions": "Guide the user on what to do next: (1) Confirm that no documents have been uploaded yet. (2) Explain what types of documents could be reviewed (examples: contracts, permits, letters, court documents). (3) Invite them to upload documents to get categorized analysis. (4) Offer alternative guidance based on their profile if they prefer to ask questions instead of uploading documents. (5) Provide next steps."
+        }
+      },
+      "measured": { "width": 240, "height": 92 }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_start_to_profile",
+      "source": "start-node",
+      "target": "user-profile-node",
+      "sourceHandle": "out_start-node",
+      "targetHandle": "in_user-profile-node"
+    },
+    {
+      "id": "edge_start_to_docs",
+      "source": "start-node",
+      "target": "documents-upload-node",
+      "sourceHandle": "out_start-node",
+      "targetHandle": "in_documents-upload-node"
+    },
+    {
+      "id": "edge_profile_to_context",
+      "source": "user-profile-node",
+      "target": "profile-context-node",
+      "sourceHandle": "out_user-profile-node",
+      "targetHandle": "in_profile-context-node"
+    },
+    {
+      "id": "edge_docs_to_check",
+      "source": "documents-upload-node",
+      "target": "doc-check-node",
+      "sourceHandle": "out_documents-upload-node",
+      "targetHandle": "in_doc-check-node"
+    },
+    {
+      "id": "edge_context_to_check",
+      "source": "profile-context-node",
+      "target": "doc-check-node",
+      "sourceHandle": "out_profile-context-node",
+      "targetHandle": "in_doc-check-node"
+    },
+    {
+      "id": "edge_check_yes_to_categorize",
+      "source": "doc-check-node",
+      "target": "doc-categorize-node",
+      "sourceHandle": "br_docs_yes",
+      "targetHandle": "in_doc-categorize-node"
+    },
+    {
+      "id": "edge_check_no_to_nodocs",
+      "source": "doc-check-node",
+      "target": "no-docs-outcome",
+      "sourceHandle": "br_docs_no",
+      "targetHandle": "in_no-docs-outcome"
+    },
+    {
+      "id": "edge_categorize_to_select",
+      "source": "doc-categorize-node",
+      "target": "doc-select-node",
+      "sourceHandle": "out_doc-categorize-node",
+      "targetHandle": "in_doc-select-node"
+    },
+    {
+      "id": "edge_select_to_analyze",
+      "source": "doc-select-node",
+      "target": "doc-analyze-node",
+      "sourceHandle": "out_doc-select-node",
+      "targetHandle": "in_doc-analyze-node"
+    },
+    {
+      "id": "edge_analyze_to_urgency",
+      "source": "doc-analyze-node",
+      "target": "urgency-check-node",
+      "sourceHandle": "out_doc-analyze-node",
+      "targetHandle": "in_urgency-check-node"
+    },
+    {
+      "id": "edge_urgency_yes_to_urgent",
+      "source": "urgency-check-node",
+      "target": "urgent-guidance-outcome",
+      "sourceHandle": "br_urgent_yes",
+      "targetHandle": "in_urgent-guidance-outcome"
+    },
+    {
+      "id": "edge_urgency_no_to_guidance",
+      "source": "urgency-check-node",
+      "target": "doc-guidance-outcome",
+      "sourceHandle": "br_urgent_no",
+      "targetHandle": "in_doc-guidance-outcome"
+    }
+  ]
+}

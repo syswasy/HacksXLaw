@@ -1,0 +1,381 @@
+{
+  "version": "1.0",
+  "exportedAt": "2026-05-09T18:30:34.123Z",
+  "exportedByUserId": "google-oauth2|114970360042632747784",
+  "dialogFlow": {
+    "name": "Untitled Dialog Flow",
+    "visibility": "public"
+  },
+  "nodes": [
+    {
+      "id": "0cf4c324-7e2e-42fb-9795-358bf205409d",
+      "type": "start",
+      "position": {
+        "x": 100,
+        "y": 273
+      },
+      "data": {
+        "label": "Start",
+        "config": {}
+      },
+      "measured": {
+        "width": 168,
+        "height": 91
+      }
+    },
+    {
+      "id": "c1b33b0f-d52f-482c-b584-abc8016b73a9",
+      "type": "fact",
+      "position": {
+        "x": 455,
+        "y": 273
+      },
+      "data": {
+        "label": "User Profile",
+        "config": {
+          "factDefinitions": [
+            {
+              "label": "Role",
+              "instructions": "What best describes your role or situation?",
+              "dataType": "custom",
+              "customEnumValues": [
+                "null",
+                "Employee",
+                "Employer",
+                "Tenant",
+                "Landlord",
+                "Consumer",
+                "Business Owner",
+                "Other"
+              ],
+              "required": true,
+              "sourcePreference": "either"
+            },
+            {
+              "label": "Jurisdiction",
+              "instructions": "What province, state, or country applies to your situation?",
+              "dataType": "text",
+              "customEnumValues": [],
+              "required": true,
+              "sourcePreference": "either"
+            },
+            {
+              "label": "Language Preference",
+              "instructions": "What language would you like the guidance in?",
+              "dataType": "custom",
+              "customEnumValues": [
+                "null",
+                "English",
+                "French",
+                "Other"
+              ],
+              "required": false,
+              "sourcePreference": "either"
+            }
+          ]
+        },
+        "prompt": "\n\n<Fact_Extraction_Instructions>\n  <Fact_1>\n    <Fact_Label>\n      Role\n    </Fact_Label>\n    <Data_Type>\n      custom\n    </Data_Type>\n    <Allowed_Values>\n      \"null\", \"Employee\", \"Employer\", \"Tenant\", \"Landlord\", \"Consumer\", \"Business Owner\", \"Other\"\n    </Allowed_Values>\n    <User_Instructions>\n      What best describes your role or situation?\n    </User_Instructions>\n  </Fact_1>\n\n  <Fact_2>\n    <Fact_Label>\n      Jurisdiction\n    </Fact_Label>\n    <Data_Type>\n      text\n    </Data_Type>\n    <User_Instructions>\n      What province, state, or country applies to your situation?\n    </User_Instructions>\n  </Fact_2>\n\n  <Fact_3>\n    <Fact_Label>\n      Language Preference\n    </Fact_Label>\n    <Data_Type>\n      custom\n    </Data_Type>\n    <Allowed_Values>\n      \"null\", \"English\", \"French\", \"Other\"\n    </Allowed_Values>\n    <User_Instructions>\n      What language would you like the guidance in?\n    </User_Instructions>\n  </Fact_3>\n</Fact_Extraction_Instructions>"
+      },
+      "measured": {
+        "width": 218,
+        "height": 91
+      }
+    },
+    {
+      "id": "87a0147f-116a-49bf-b376-998f376366a1",
+      "type": "fact",
+      "position": {
+        "x": 826.5,
+        "y": 273
+      },
+      "data": {
+        "label": "Documents",
+        "config": {
+          "factDefinitions": [
+            {
+              "label": "Documents Uploaded",
+              "instructions": "Please upload the documents you want us to review.",
+              "dataType": "document_uploaded",
+              "required": false,
+              "sourcePreference": "docs-only",
+              "customEnumValues": []
+            },
+            {
+              "label": "Document Count",
+              "instructions": "How many documents did you upload?",
+              "dataType": "number",
+              "required": false,
+              "sourcePreference": "docs-only",
+              "customEnumValues": []
+            }
+          ]
+        }
+      },
+      "measured": {
+        "width": 216,
+        "height": 91
+      }
+    },
+    {
+      "id": "152c1c52-30b4-4a5b-88d4-9d2a17fecc6d",
+      "type": "reasoning",
+      "position": {
+        "x": 806,
+        "y": 273
+      },
+      "data": {
+        "label": "Guidance Profile",
+        "config": {
+          "question": "How should the guidance be tailored to the user's profile?",
+          "instructions": "Use the user's role, jurisdiction, and language preference to adapt the tone, scope, and framing of any guidance. The profile should influence all downstream recommendations, including how issues are explained, what next steps are suggested, and which resources may be relevant. Where the jurisdiction matters, keep recommendations aligned to the governing local law or process. If the profile is incomplete, provide the best available guidance while noting the missing context.",
+          "footnotes": [],
+          "dataType": "text",
+          "customEnumValues": [],
+          "isChildNode": false,
+          "children": []
+        },
+        "prompt": ""
+      },
+      "measured": {
+        "width": 256,
+        "height": 93
+      }
+    },
+    {
+      "id": "da4484fc-b26c-45fd-bb98-daeba4e3a427",
+      "type": "switch",
+      "position": {
+        "x": 1198,
+        "y": 273
+      },
+      "data": {
+        "label": "Document Present",
+        "config": {
+          "branches": [
+            {
+              "id": "br_4dcfce43",
+              "conditions": [
+                {
+                  "sourceNodeId": "87a0147f-116a-49bf-b376-998f376366a1:1",
+                  "operator": ">",
+                  "compareValue": 0,
+                  "conditionOperator": "AND"
+                }
+              ],
+              "targetNodeId": "e9a91fc7-9989-4356-8f2e-390277330a12",
+              "isDefault": false,
+              "color": "border-blue-500"
+            },
+            {
+              "id": "br_0a03ec1e",
+              "conditions": [],
+              "targetNodeId": "8e15645c-04c1-441a-a623-e179ae5435f4",
+              "isDefault": true,
+              "color": "border-orange-500"
+            }
+          ]
+        }
+      },
+      "measured": {
+        "width": 267,
+        "height": 91
+      }
+    },
+    {
+      "id": "e9a91fc7-9989-4356-8f2e-390277330a12",
+      "type": "reasoning",
+      "position": {
+        "x": 1565,
+        "y": 182
+      },
+      "data": {
+        "label": "Document Review",
+        "config": {
+          "question": "What should be done with the uploaded document(s)?",
+          "instructions": "Determine the appropriate path based on the documents provided. If there are multiple documents, group them by category and note when a category contains more than one item so they can be summarized together. When a specific document is being opened, identify its document type first, then assess whether there is any urgency, incompleteness, or problem that requires immediate attention. If urgency exists, surface it immediately and prioritize action-oriented advice. If there is no urgency, explain the document in plain language, translate jargon into clear terms, and identify the next concrete step. Keep the user's profile in mind for all recommendations and ensure any resource referral is included whenever it is relevant or helpful.",
+          "footnotes": [],
+          "dataType": "text",
+          "customEnumValues": [],
+          "isChildNode": false,
+          "children": []
+        },
+        "prompt": ""
+      },
+      "measured": {
+        "width": 265,
+        "height": 91
+      }
+    },
+    {
+      "id": "f5ef268a-0dd5-447c-991e-169f5c41e397",
+      "type": "switch",
+      "position": {
+        "x": 1957,
+        "y": 273
+      },
+      "data": {
+        "label": "Urgency Check",
+        "config": {
+          "branches": [
+            {
+              "id": "br_a0bf1725",
+              "conditions": [
+                {
+                  "sourceNodeId": "e9a91fc7-9989-4356-8f2e-390277330a12",
+                  "operator": "contains",
+                  "compareValue": "urgent",
+                  "conditionOperator": "AND"
+                }
+              ],
+              "targetNodeId": "40d15193-108f-4a9e-8471-278fda2fe295",
+              "isDefault": false,
+              "color": "border-blue-500"
+            },
+            {
+              "id": "br_65010ccb",
+              "conditions": [],
+              "targetNodeId": "3fabbd11-72de-4fe1-b39b-d9469d541fe0",
+              "isDefault": true,
+              "color": "border-orange-500"
+            }
+          ]
+        }
+      },
+      "measured": {
+        "width": 244,
+        "height": 91
+      }
+    },
+    {
+      "id": "40d15193-108f-4a9e-8471-278fda2fe295",
+      "type": "outcome",
+      "position": {
+        "x": 2324,
+        "y": 182
+      },
+      "data": {
+        "label": "Urgent Guidance",
+        "config": {
+          "template": "free_form",
+          "instructions": "Present the document-specific advice with the urgency stated immediately at the top. Explain why the matter requires prompt attention, then give the next concrete step and any immediate resource or help pathway that fits the user's profile and jurisdiction."
+        },
+        "prompt": ""
+      },
+      "measured": {
+        "width": 256,
+        "height": 91
+      }
+    },
+    {
+      "id": "3fabbd11-72de-4fe1-b39b-d9469d541fe0",
+      "type": "outcome",
+      "position": {
+        "x": 2324,
+        "y": 364
+      },
+      "data": {
+        "label": "Document Guidance",
+        "config": {
+          "template": "free_form",
+          "instructions": "Provide a clear, document-specific explanation in plain language. Summarize any jargon, state the next concrete step, and include a helpful resource or referral when relevant. Keep the response tailored to the user's profile and jurisdiction."
+        },
+        "prompt": ""
+      },
+      "measured": {
+        "width": 281,
+        "height": 91
+      }
+    },
+    {
+      "id": "8e15645c-04c1-441a-a623-e179ae5435f4",
+      "type": "outcome",
+      "position": {
+        "x": 1565,
+        "y": 364
+      },
+      "data": {
+        "label": "No Documents",
+        "config": {
+          "instructions": "Tell the user that no documents were uploaded and invite them to upload documents if they want a document-based review. Briefly explain that document-specific guidance and categorization will become available once files are provided.",
+          "template": "No documents uploaded yet. Upload documents to continue."
+        }
+      },
+      "measured": {
+        "width": 240,
+        "height": 91
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_0cf4c324-7e2e-42fb-9795-358bf205409d_c1b33b0f-d52f-482c-b584-abc8016b73a9",
+      "source": "0cf4c324-7e2e-42fb-9795-358bf205409d",
+      "target": "c1b33b0f-d52f-482c-b584-abc8016b73a9",
+      "sourceHandle": "out_0cf4c324-7e2e-42fb-9795-358bf205409d",
+      "targetHandle": "in_c1b33b0f-d52f-482c-b584-abc8016b73a9"
+    },
+    {
+      "id": "edge_0cf4c324-7e2e-42fb-9795-358bf205409d_87a0147f-116a-49bf-b376-998f376366a1",
+      "source": "0cf4c324-7e2e-42fb-9795-358bf205409d",
+      "target": "87a0147f-116a-49bf-b376-998f376366a1",
+      "sourceHandle": "out_0cf4c324-7e2e-42fb-9795-358bf205409d",
+      "targetHandle": "in_87a0147f-116a-49bf-b376-998f376366a1"
+    },
+    {
+      "id": "edge_c1b33b0f-d52f-482c-b584-abc8016b73a9_152c1c52-30b4-4a5b-88d4-9d2a17fecc6d",
+      "source": "c1b33b0f-d52f-482c-b584-abc8016b73a9",
+      "target": "152c1c52-30b4-4a5b-88d4-9d2a17fecc6d",
+      "sourceHandle": "out_c1b33b0f-d52f-482c-b584-abc8016b73a9",
+      "targetHandle": "in_152c1c52-30b4-4a5b-88d4-9d2a17fecc6d"
+    },
+    {
+      "id": "edge_87a0147f-116a-49bf-b376-998f376366a1_da4484fc-b26c-45fd-bb98-daeba4e3a427",
+      "source": "87a0147f-116a-49bf-b376-998f376366a1",
+      "target": "da4484fc-b26c-45fd-bb98-daeba4e3a427",
+      "sourceHandle": "out_87a0147f-116a-49bf-b376-998f376366a1",
+      "targetHandle": "in_da4484fc-b26c-45fd-bb98-daeba4e3a427"
+    },
+    {
+      "id": "edge_152c1c52-30b4-4a5b-88d4-9d2a17fecc6d_da4484fc-b26c-45fd-bb98-daeba4e3a427",
+      "source": "152c1c52-30b4-4a5b-88d4-9d2a17fecc6d",
+      "target": "da4484fc-b26c-45fd-bb98-daeba4e3a427",
+      "sourceHandle": "out_152c1c52-30b4-4a5b-88d4-9d2a17fecc6d",
+      "targetHandle": "in_da4484fc-b26c-45fd-bb98-daeba4e3a427"
+    },
+    {
+      "id": "edge_da4484fc-b26c-45fd-bb98-daeba4e3a427_e9a91fc7-9989-4356-8f2e-390277330a12_br_4dcfce43",
+      "source": "da4484fc-b26c-45fd-bb98-daeba4e3a427",
+      "target": "e9a91fc7-9989-4356-8f2e-390277330a12",
+      "sourceHandle": "br_4dcfce43",
+      "targetHandle": "in_e9a91fc7-9989-4356-8f2e-390277330a12"
+    },
+    {
+      "id": "edge_da4484fc-b26c-45fd-bb98-daeba4e3a427_8e15645c-04c1-441a-a623-e179ae5435f4_br_0a03ec1e",
+      "source": "da4484fc-b26c-45fd-bb98-daeba4e3a427",
+      "target": "8e15645c-04c1-441a-a623-e179ae5435f4",
+      "sourceHandle": "br_0a03ec1e",
+      "targetHandle": "in_8e15645c-04c1-441a-a623-e179ae5435f4"
+    },
+    {
+      "id": "edge_e9a91fc7-9989-4356-8f2e-390277330a12_f5ef268a-0dd5-447c-991e-169f5c41e397",
+      "source": "e9a91fc7-9989-4356-8f2e-390277330a12",
+      "target": "f5ef268a-0dd5-447c-991e-169f5c41e397",
+      "sourceHandle": "out_e9a91fc7-9989-4356-8f2e-390277330a12",
+      "targetHandle": "in_f5ef268a-0dd5-447c-991e-169f5c41e397"
+    },
+    {
+      "id": "edge_f5ef268a-0dd5-447c-991e-169f5c41e397_40d15193-108f-4a9e-8471-278fda2fe295_br_a0bf1725",
+      "source": "f5ef268a-0dd5-447c-991e-169f5c41e397",
+      "target": "40d15193-108f-4a9e-8471-278fda2fe295",
+      "sourceHandle": "br_a0bf1725",
+      "targetHandle": "in_40d15193-108f-4a9e-8471-278fda2fe295"
+    },
+    {
+      "id": "edge_f5ef268a-0dd5-447c-991e-169f5c41e397_3fabbd11-72de-4fe1-b39b-d9469d541fe0_br_65010ccb",
+      "source": "f5ef268a-0dd5-447c-991e-169f5c41e397",
+      "target": "3fabbd11-72de-4fe1-b39b-d9469d541fe0",
+      "sourceHandle": "br_65010ccb",
+      "targetHandle": "in_3fabbd11-72de-4fe1-b39b-d9469d541fe0"
+    }
+  ]
+}

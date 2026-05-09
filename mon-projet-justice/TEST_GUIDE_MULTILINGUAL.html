@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JusticeAccess - Guide de Test Multilingue</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a365d;
+            border-bottom: 3px solid #3182ce;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #2d3748;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3182ce;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 6px;
+        }
+        .scenario {
+            background: #edf2f7;
+            border-left: 4px solid #3182ce;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #3182ce;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+        .success {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success::before {
+            content: "✓ ";
+            color: #22c55e;
+            font-weight: bold;
+        }
+        .warning {
+            background: #fef3c7;
+            border-left: 4px solid #fbbf24;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .demo-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1a365d;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .badge {
+            display: inline-block;
+            background: #3182ce;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 5px 5px 5px 0;
+        }
+        .hackathon-header {
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .hackathon-header h1 {
+            color: white;
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+        .hackathon-header p {
+            margin: 10px 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        ul { margin-left: 20px; }
+        li { margin: 8px 0; }
+        .flow-diagram {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-family: monospace;
+            margin: 15px 0;
+            line-height: 2;
+            border: 1px solid #cbd5e0;
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; max-width: 100%; }
+            .section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hackathon-header">
+            <h1>JusticeAccess</h1>
+            <p>Guide de Test Multilingue - Hackathon Edition</p>
+            <p style="font-size: 0.95em; opacity: 0.8;">Montreal AI x Law 2026 | 9 mai 2026</p>
+        </div>
+
+        <h2>Résumé des Modifications</h2>
+        <div class="section">
+            <h3>1. Fonction Décodeur de Langue</h3>
+            <p><strong>Fichier:</strong> <code>src/App.tsx</code></p>
+            <p>Mappe plus de 30 langues à leurs codes BCP 47 pour une lecture audio native du navigateur.</p>
+            <div class="code-block">
+function getLanguageCode(language?: string): string {
+  const languageMap = {
+    'arabic': 'ar-SA',
+    'english': 'en-US',
+    'spanish': 'es-ES',
+    'french': 'fr-CA',
+    // ... 26 autres langues
+  }
+}
+            </div>
+
+            <h3>2. Traduction du Plan d'Action</h3>
+            <p><strong>Fichier:</strong> <code>src/lib/openJustice.ts</code></p>
+            <p>Traduit automatiquement les étapes du plan d'action basé sur la langue maternelle de l'utilisateur.</p>
+            <div class="code-block">
+export function translateActionPlan(
+  actionPlan: ActionPlan, 
+  language?: string
+): ActionPlan
+            </div>
+
+            <h3>3. Intégration en StepActionPlan</h3>
+            <p>Le composant reçoit la langue de l'utilisateur et:
+                <ul>
+                    <li>Traduit le plan d'action</li>
+                    <li>Passe le code de langue correct à TextToSpeech</li>
+                    <li>Active l'audio natif dans la langue maternelle</li>
+                </ul>
+            </p>
+        </div>
+
+        <h2>Scénarios de Test</h2>
+
+        <div class="scenario">
+            <div class="demo-title">Scénario 1: Réfugié parlant Arabe</div>
+            <p><strong>Profil Utilisateur:</strong></p>
+            <ul>
+                <li>Âge: 32 ans</li>
+                <li>Pays d'origine: Syrie</li>
+                <li>Statut migratoire: Demandeur d'asile</li>
+                <li><strong>Langue maternelle: arabe</strong></li>
+                <li>Problèmes juridiques: Immigration, Logement</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Résultats Attendus:</strong></p>
+            <div class="success">Plan d'action traduit en arabe</div>
+            <div class="success">Audio natif en arabe saoudien (ar-SA)</div>
+            <div class="success">Titre: "تقديم طلب الحماية" (Soumettre demande de protection)</div>
+            <div class="success">Description complète en arabe</div>
+            <p style="margin-top: 15px;"><strong>À Tester:</strong> Cliquez sur [LISTEN] Écouter et écoutez le plan d'action se lire en arabe natif</p>
+        </div>
+
+        <div class="scenario">
+            <div class="demo-title">Scénario 2: Travailleur Temporaire parlant Espagnol</div>
+            <p><strong>Profil Utilisateur:</strong></p>
+            <ul>
+                <li>Âge: 28 ans</li>
+                <li>Pays d'origine: Mexique</li>
+                <li>Statut migratoire: Travailleur temporaire</li>
+                <li><strong>Langue maternelle: español</strong></li>
+                <li>Problèmes juridiques: Emploi</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Résultats Attendus:</strong></p>
+            <div class="success">Plan d'action traduit en espagnol</div>
+            <div class="success">Titre: "Verificar estado laboral" (Vérifier statut de travail)</div>
+            <div class="success">Audio en espagnol d'Espagne (es-ES)</div>
+        </div>
+
+        <div class="scenario">
+            <div class="demo-title">Scénario 3: Immigrant parlant Anglais</div>
+            <p><strong>Profil Utilisateur:</strong></p>
+            <ul>
+                <li>Âge: 45 ans</li>
+                <li>Pays d'origine: Inde</li>
+                <li>Statut migratoire: Résident permanent</li>
+                <li><strong>Langue maternelle: english</strong></li>
+                <li>Problèmes juridiques: Emploi</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Résultats Attendus:</strong></p>
+            <div class="success">Plan d'action traduit en anglais</div>
+            <div class="success">Audio en anglais américain (en-US)</div>
+        </div>
+
+        <div class="scenario">
+            <div class="demo-title">Scénario 4: Francophone (Test de Régression)</div>
+            <p><strong>Profil Utilisateur:</strong></p>
+            <ul>
+                <li><strong>Langue maternelle: français</strong></li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Résultats Attendus:</strong></p>
+            <div class="success">Plan d'action reste en français (pas de traduction)</div>
+            <div class="success">Audio en français canadien (fr-CA)</div>
+        </div>
+
+        <h2>Architecture du Flux Multilingue</h2>
+        <div class="flow-diagram">
+UserProfile.primary_language<br>
+↓<br>
+App.tsx → StepActionPlan (prop userLanguage)<br>
+↓<br>
+getLanguageCode(userLanguage) → "ar-SA", "es-ES", etc.<br>
+↓<br>
+translateActionPlan(actionPlan, userLanguage)<br>
+↓<br>
+TextToSpeech language={languageCode}<br>
+↓<br>
+SpeechSynthesisUtterance.lang = languageCode<br>
+↓<br>
+Audio natif dans la langue de l'utilisateur
+        </div>
+
+        <h2>Langues Supportées</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Langue</th>
+                    <th>Codes Acceptés</th>
+                    <th>Code Audio (BCP 47)</th>
+                    <th>Traduit?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Arabe</td>
+                    <td>arabic, arabe</td>
+                    <td>ar-SA</td>
+                    <td>✓ Oui</td>
+                </tr>
+                <tr>
+                    <td>Anglais</td>
+                    <td>english, anglais</td>
+                    <td>en-US</td>
+                    <td>✓ Oui</td>
+                </tr>
+                <tr>
+                    <td>Espagnol</td>
+                    <td>spanish, español</td>
+                    <td>es-ES</td>
+                    <td>✓ Oui</td>
+                </tr>
+                <tr>
+                    <td>Français</td>
+                    <td>french, français</td>
+                    <td>fr-CA</td>
+                    <td>✓ Oui</td>
+                </tr>
+                <tr>
+                    <td>Mandarin</td>
+                    <td>chinese, mandarin, chinois</td>
+                    <td>zh-CN</td>
+                    <td>○ Audio seulement</td>
+                </tr>
+                <tr>
+                    <td>Portugais</td>
+                    <td>portuguese, portugais</td>
+                    <td>pt-BR</td>
+                    <td>○ Audio seulement</td>
+                </tr>
+                <tr>
+                    <td>Allemand</td>
+                    <td>german, allemand</td>
+                    <td>de-DE</td>
+                    <td>○ Audio seulement</td>
+                </tr>
+                <tr>
+                    <td>Japonais</td>
+                    <td>japanese, japonais</td>
+                    <td>ja-JP</td>
+                    <td>○ Audio seulement</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Instructions de Démonstration pour le Hackathon</h2>
+        <div class="section">
+            <h3>Avant la Présentation</h3>
+            <ul>
+                <li><input type="checkbox"> Build du projet réussie: <code>npm run build</code></li>
+                <li><input type="checkbox"> Application démarre: <code>npm run dev</code></li>
+                <li><input type="checkbox"> Tester avec langue = "arabic" → arabe affiché</li>
+                <li><input type="checkbox"> Tester audio "Écouter" → son en arabe</li>
+                <li><input type="checkbox"> Tester avec "english" → anglais affiché</li>
+                <li><input type="checkbox"> Tester avec "french" → français affiché</li>
+            </ul>
+
+            <h3>Pendant la Présentation (2-3 minutes)</h3>
+            <div class="success">Montrer le code de mappage des langues (15 sec)</div>
+            <div class="success">Montrer un utilisateur arabophone recevant des conseils en arabe (30 sec)</div>
+            <div class="success">Cliquer "Écouter" et laisser l'audio se jouer en arabe (30 sec)</div>
+            <div class="success">Montrer la scalabilité (ajouter une nouvelle langue = 5 min) (30 sec)</div>
+            <div class="success">Montrer un deuxième utilisateur en anglais/espagnol (30 sec)</div>
+
+            <h3>Points de Démonstration Clés</h3>
+            <p><span class="badge">Accessibilité</span> "Notre app parle la langue maternelle de l'utilisateur"</p>
+            <p><span class="badge">Scalabilité</span> "Support de 30+ langues avec un mapping simple"</p>
+            <p><span class="badge">Juridique + Tech</span> "Plans d'action traduits + audio natif = accessibilité complète"</p>
+            <p><span class="badge">Zero Data</span> "Web Speech API natif du navigateur = zéro appel API de traduction"</p>
+        </div>
+
+        <h2>Validations Techniques</h2>
+        <div class="section">
+            <h3>Tester dans la Console du Navigateur</h3>
+            <div class="code-block">
+// Test 1: Créer une utterance en arabe
+const utterance = new SpeechSynthesisUtterance("مرحبا");
+utterance.lang = "ar-SA";
+speechSynthesis.speak(utterance);
+// → Devrait parler en arabe
+
+// Test 2: Vérifier le code de langue
+console.log(getLanguageCode("arabe")); // → "ar-SA"
+console.log(getLanguageCode("español")); // → "es-ES"
+            </div>
+
+            <h3>Tests de Traduction</h3>
+            <p>Les traductions ne sont complètes que pour 4 langues (arabe, anglais, espagnol, français).</p>
+            <div class="warning">
+                <strong>Fallback:</strong> Les phrases non-traduites restent en français
+            </div>
+        </div>
+
+        <h2>Prochaines Étapes Post-Hackathon</h2>
+        <div class="section">
+            <ul>
+                <li><strong>Intégration Google Translate API:</strong> Support illimité de langues</li>
+                <li><strong>Traductions Professionnelles:</strong> Engager traducteurs juridiques certifiés</li>
+                <li><strong>Détection Automatique:</strong> Utiliser les paramètres de langue du navigateur</li>
+                <li><strong>Support Regional:</strong> ar-SA vs ar-EG vs ar-MA pour des accents différents</li>
+                <li><strong>Cache Local:</strong> Mémoriser traductions pour performance offline</li>
+            </ul>
+        </div>
+
+        <h2>Fichiers Modifiés</h2>
+        <div class="section">
+            <div class="code-block">
+src/App.tsx
+├── + getLanguageCode() function (ligne ~15)
+├── + translateActionPlan import (ligne ~5)
+├── Modified StepActionPlan props (ligne ~400)
+└── Modified TextToSpeech language prop (ligne ~520)
+
+src/lib/openJustice.ts
+├── + translateActionPlan() function (~120 lignes)
+└── + translations dictionary (4 langues, extensible)
+
+src/components/TextToSpeech.tsx
+└── (Déjà compatible - accepte param language)
+            </div>
+        </div>
+
+        <h2>Support & Contact</h2>
+        <div class="section" style="background: #dbeafe; border-left: 4px solid #3182ce;">
+            <p><strong>Hackathon:</strong> Montreal AI x Law 2026</p>
+            <p><strong>Date:</strong> 9 mai 2026</p>
+            <p><strong>Tech Stack:</strong> React 19 + TypeScript + Web Speech API</p>
+            <p><strong>Compliance:</strong> Loi 25 (Québec) + AODA (Ontario)</p>
+        </div>
+    </div>
+
+    <script>
+        // Script pour imprimer en PDF
+        console.log("Pour exporter en PDF: Fichier → Imprimer → Enregistrer en tant que PDF");
+    </script>
+</body>
+</html>
