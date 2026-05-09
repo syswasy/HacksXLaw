@@ -33,9 +33,9 @@ user_text = st.text_area(
 )
 
 uploaded_files = st.file_uploader(
-    "Téléversez vos documents (images, PDF)",
-    type=["png", "jpg", "jpeg", "pdf"],
-    accept_multiple_files=True
+ "Téléversez vos documents (images, PDF, TXT)",
+ type=["png", "jpg", "jpeg", "pdf", "txt"],
+ accept_multiple_files=True
 )
 
 if st.button("Analyser mon dossier"):
